@@ -24,9 +24,14 @@ def checklist(items: list[str]) -> None:
 
 @st.dialog("Join our first season")
 def join_dialog() -> None:
+    if st.session_state.get("signup_done"):
+        st.success("Thank you. We will be in touch.")
+        st.write("You can close this window now.")
+        return
     st.write("We are starting with a small trial of two or three farms and one grocer. "
              "Leave your details and we will get back to you.")
     st.caption(content.PRIVACY)
+    message = st.container()  # confirmations and errors show here, at the top, where they cannot be missed
     default_role = st.session_state.get("role_default", "Farm")
     with st.form("signup"):
         name = st.text_input("Your name")
@@ -38,14 +43,16 @@ def join_dialog() -> None:
         submitted = st.form_submit_button("Send", type="primary")
     if submitted:
         if not name.strip() or not storage.valid_email(email):
-            st.error("Please enter your name and a valid email address.")
+            message.error("Please enter your name and a valid email address.")
         else:
             storage.save_signup(name.strip(), email.strip(), role, note.strip(), feedback.strip())
-            st.success("Thank you. We will be in touch.")
+            st.session_state["signup_done"] = True
+            st.rerun(scope="fragment")
 
 
 def open_join(role: str) -> None:
     st.session_state["role_default"] = role
+    st.session_state["signup_done"] = False
     join_dialog()
 
 
