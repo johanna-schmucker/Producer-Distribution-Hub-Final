@@ -28,12 +28,18 @@ MONTREAL_AREAS = {
 }
 
 
+def _charset(names) -> str:
+    """Characters the labels need, so accents render. pydeck treats plain strings as expressions, so the value is
+    wrapped in single quotes to pass it through as a literal."""
+    return "'" + "".join(sorted(set("".join(names)) - set("\"'`\\"))) + "'"
+
+
 def area_map(points: dict, center: tuple, zoom: float, region_radius: int = 0, selected: str | None = None,
              highlight: tuple = ()) -> None:
     marked = {selected, *highlight}
     df = pd.DataFrame([{"name": n, "lat": lat, "lon": lon} for n, (lat, lon) in points.items()])
     df["color"] = [[46, 125, 50, 255] if n in marked else [17, 17, 17, 200] for n in df["name"]]
-    base = max(region_radius // 14, 400)
+    base = max(region_radius // 40, 150)
     df["size"] = [int(base * 1.6) if n in marked else base for n in df["name"]]
     layers = []
     if region_radius:
@@ -45,7 +51,7 @@ def area_map(points: dict, center: tuple, zoom: float, region_radius: int = 0, s
         pdk.Layer("ScatterplotLayer", df, get_position="[lon, lat]", get_radius="size", get_fill_color="color",
                   radius_min_pixels=5, pickable=True),
         pdk.Layer("TextLayer", df, get_position="[lon, lat]", get_text="name", get_size=13, get_color=[17, 17, 17, 255],
-                  get_pixel_offset=[0, -16], get_alignment_baseline="'bottom'", font_weight=600, font_family="Arial, sans-serif", character_set="auto", outline_width=3,
+                  get_pixel_offset=[0, -16], get_alignment_baseline="'bottom'", font_weight=600, font_family="Arial, sans-serif", character_set=_charset(df["name"]), outline_width=3,
                   outline_color=[255, 255, 255, 255], font_settings={"sdf": True}),
     ]
     deck = pdk.Deck(map_style="light", layers=layers, tooltip={"text": "{name}"},
