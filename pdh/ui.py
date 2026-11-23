@@ -56,7 +56,10 @@ def open_join(role: str) -> None:
     join_dialog()
 
 
-LOGO = '<svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><line x1="5" y1="10" x2="29" y2="10" stroke="#111" stroke-width="2"/><circle cx="5" cy="10" r="4" fill="#111"/><circle cx="17" cy="10" r="6" fill="#2E7D32"/><circle cx="29" cy="10" r="4" fill="#111"/></svg>'
+LOGO = ('<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true">'
+        '<path d="M20 36V19" stroke="#1A3D2B" stroke-width="3" stroke-linecap="round" fill="none"/>'
+        '<path d="M20 22C20 12 12 8 4 9c0 9 6 14 16 13Z" fill="#2E7D32"/>'
+        '<path d="M20 18C20 10 26 5 35 5c0 8-6 13-15 13Z" fill="#7DBE5A"/></svg>')
 
 NAV = [("views/home.py", "Home"), ("views/farms.py", "For farms"),
        ("views/buyers.py", "For grocers and restaurants"), ("views/model.py", "Business model")]
@@ -79,6 +82,6 @@ def top_bar() -> None:
 
 def footer() -> None:
     html(f"""
-    <div class="footer"><span>{config.BRAND}, Montérégie, Québec</span>
+    <div class="footer"><span>{config.BRAND} ({config.PROJECT_NAME}), Montérégie, Québec</span>
     <span>Contact: <a href="mailto:{config.CONTACT_EMAIL}" style="color:inherit">{config.CONTACT_EMAIL}</a> &nbsp;|&nbsp; A student start-up project, HEC Montréal</span></div>
     """)

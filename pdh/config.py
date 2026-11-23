@@ -10,7 +10,8 @@ DATA_DIR = Path(os.environ.get("PDH_DATA_DIR", ROOT / "data"))
 SIGNUP_FILE = DATA_DIR / "signups.csv"
 POLL_FILE = DATA_DIR / "poll.csv"
 
-BRAND = "Producer Distribution Hub"
+BRAND = "FarmLink"
+PROJECT_NAME = "Producer Distribution Hub"  # the course project name, shown in the footer
 TAGLINE = "Know what you eat. High quality. Be conscious."
 CONTACT_EMAIL = "johanna-luisa.schmucker@hec.ca"
 ROLES = ["Farm", "Grocery store", "Restaurant", "Something else"]
